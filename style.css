@@ -1,0 +1,218 @@
+/* الحاوية الرئيسية للملعب */
+.radar-container {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    background: radial-gradient(circle, #1a2a1a, #0a0f0a);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* خط المنتصف والدائرة */
+.half-line {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: rgba(255, 215, 0, 0.3);
+    z-index: 1;
+}
+
+.mid-circle {
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    width: 120px !important;
+    height: 120px !important;
+    border: 1px solid rgba(255, 215, 0, 0.4) !important;
+    border-radius: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    z-index: 1 !important;
+}
+
+/* المرمى العلوي والسفلي */
+.top-goal {
+    position: absolute;
+    top: 0;
+    left: 25%;
+    width: 50%;
+    height: 40px;
+    border: 2px solid #FFD700;
+    border-top: none;
+    border-radius: 0 0 20px 20px;
+}
+
+.bottom-goal {
+    position: absolute;
+    bottom: 0;
+    left: 25%;
+    width: 50%;
+    height: 40px;
+    border: 2px solid #FFD700;
+    border-bottom: none;
+    border-radius: 20px 20px 0 0;
+}
+
+/* نقاط اللاعبين (الذهب المتوهج) */
+.target-dot {
+    position: absolute;
+    width: 15px;
+    height: 15px;
+    background-color: #FFD700;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 100;
+    box-shadow: 0 0 15px #FFD700;
+}
+
+.target-dot::after {
+    content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border: 1px solid rgba(255, 215, 0, 0.5);
+    border-radius: 50%;
+    animation: pulse-gold-expand 2s infinite;
+}
+
+@keyframes pulse-gold-expand {
+    0% { transform: scale(1); opacity: 1; }
+    100% { transform: scale(2.5); opacity: 0; }
+}
+
+/* أسماء المراكز */
+.target-label {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #FFD700;
+    font-weight: bold;
+    white-space: nowrap;
+    background: rgba(0, 0, 0, 0.6);
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 12px;
+}
+
+/* الخطوط الليزرية (النسخة الاحترافية المتحركة) */
+#tactical-lines line {
+    stroke: #FFD700;
+    stroke-width: 3;
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.8));
+    stroke-dasharray: 10, 5;
+    animation: laser-flow 2s infinite linear;
+}
+
+@keyframes laser-flow {
+    from { stroke-dashoffset: 20; }
+    to { stroke-dashoffset: 0; }
+}
+
+/* سبورة الرسم اليدوي (للمدرب) */
+#tactical-board {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99 !important;
+    pointer-events: all !important;
+    cursor: crosshair;
+}
+
+/* أزرار التحكم والتشكيلات */
+.formation-selector {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 15px;
+    z-index: 101;
+}
+
+.formation-selector button, .clear-btn {
+    background: rgba(255, 215, 0, 0.1);
+    border: 1px solid #FFD700;
+    color: #FFD700;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.formation-selector button:hover, .clear-btn:hover {
+    background: #FFD700;
+    color: #000;
+    box-shadow: 0 0 15px #FFD700;
+}/* مناطق الجزاء (العلوية والسفلية) */
+.top-penalty-area, .bottom-penalty-area {
+    position: absolute;
+    left: 15%;
+    width: 70%;
+    height: 18%; /* زيادة الارتفاع لتبدو واقعية */
+    border: 1px solid rgba(255, 215, 0, 0.5); /* لون ذهبي واضح */
+    z-index: 2; /* تأكد أنها فوق أرضية الملعب وتحت اللاعبين */
+}
+
+.top-penalty-area { top: 0; border-top: none; }
+.bottom-penalty-area { bottom: 0; border-bottom: none; }
+
+/* الأركان (الركنيات) */
+.corner {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(255, 215, 0, 0.4);
+    z-index: 2;
+}
+
+.top-left { top: -20px; left: -20px; border-radius: 50%; }
+.top-right { top: -20px; right: -20px; border-radius: 50%; }
+.bottom-left { bottom: -20px; left: -20px; border-radius: 50%; }
+.bottom-right { bottom: -20px; right: -20px; border-radius: 50%; }
+
+/* المرمى (الهدف) */
+.goal-area {
+    position: absolute;
+    left: 35%;
+    width: 30%;
+    height: 30px;
+    border: 2px solid #FFD700;
+    z-index: 3;
+}
+
+.top-goal { top: 0; border-top: none; border-radius: 0 0 10px 10px; }
+.bottom-goal { bottom: 0; border-bottom: none; border-radius: 10px 10px 0 0; }
+/* منع التكبير المزعج عند اللمس المزدوج وتعطيل تحديد النصوص */
+* {
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* ضبط حجم الملعب ليتناسب مع شاشات الهواتف الطولية */
+@media (max-width: 600px) {
+    .radar-container {
+        height: 90vh; /* ترك مساحة للأزرار في الأسفل */
+    }
+    .formation-selector button {
+        padding: 5px 10px;
+        font-size: 10px; /* تصغير الأزرار لتناسب عرض الهاتف */
+    }
+}
+/* كود ضروري لتجربة الهاتف الاحترافية */
+html, body {
+    position: fixed; /* يمنع اهتزاز الصفحة عند السحب */
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+    touch-action: none; /* يمنع حركات المتصفح الافتراضية ليسمح لك بالرسم الحر */
+}

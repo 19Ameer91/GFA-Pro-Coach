@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>GFA - Pro Coach International</title>
+    
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="GFA Pro">
+    <link rel="apple-touch-icon" href="logo.png">
+</head>
+<body>
+
+    <div class="formation-selector">
+        <button onclick="changeFormation('4-3-3')">4-3-3</button>
+        <button onclick="changeFormation('4-4-2')">4-4-2</button>
+        <button onclick="changeFormation('3-5-2')">3-5-2</button>
+    </div>
+
+    <div class="radar-container">
+        <div class="half-line"></div>
+        <div class="mid-circle"></div>
+        
+        <div class="top-penalty-area"></div>
+        <div class="bottom-penalty-area"></div>
+        
+        <div class="corner top-left"></div>
+        <div class="corner top-right"></div>
+        <div class="corner bottom-left"></div>
+        <div class="corner bottom-right"></div>
+        
+        <div class="goal-area top-goal"></div>
+        <div class="goal-area bottom-goal"></div>
+
+        <canvas id="tactical-board"></canvas>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
