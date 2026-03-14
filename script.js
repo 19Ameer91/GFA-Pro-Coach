@@ -1,88 +1,81 @@
-// 1. تحديث وقت صلالة والترحيب
-function updateSalalahTime() {
+// =======================================================
+// --- 1. نظام التوقيت والترحيب ---
+// =======================================================
+function updateClock() {
     const now = new Date();
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
     
-    // الساعة
-    const timeString = now.toLocaleTimeString('ar-OM', { hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true });
-    document.getElementById('digital-clock').innerText = timeString;
+    const clockElement = document.getElementById('digital-clock');
+    if (clockElement) clockElement.textContent = `${hours}:${minutes}:${seconds}`;
 
-    // التاريخ
-    const dateString = now.toLocaleDateString('ar-OM', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
-    document.getElementById('current-date').innerText = dateString;
-
-    // الترحيب
-    const hour = now.getHours();
-    let msg = "";
-    if (hour < 12) msg = "صباح الخير يا أمير 🌅";
-    else if (hour < 18) msg = "طاب مساؤك يا أمير ☀️";
-    else msg = "مساء الخير يا أمير 🌙";
-    document.getElementById('welcome-message').innerText = msg + " | مركز القيادة الدولي";
+    const welcomeElement = document.getElementById('welcome-message');
+    if (welcomeElement) {
+        const hour = now.getHours();
+        if (hour < 12) welcomeElement.textContent = "صباح الخير يا قائد، يوم جبار لمستعمرة GFA";
+        else if (hour < 18) welcomeElement.textContent = "طاب مساؤك يا أمير، العمل مستمر في مركز القيادة";
+        else welcomeElement.textContent = "مرحباً بك في وردية المساء بمركز القيادة الدولي";
+    }
 }
 
-// 2. عرض البيانات وتحديث الأرقام
-function renderTable() {
-    let coaches = JSON.parse(localStorage.getItem('coaches')) || [];
+// =======================================================
+// --- 2. صمامات الأمان وقرار المسار ---
+// =======================================================
+function lockPath(type) {
+    const warningBox = document.getElementById('warning-box');
+    const warningText = document.getElementById('warning-text');
     
-    // تحديث رقم الإحصائيات
-    document.getElementById('totalCoaches').innerText = coaches.length;
+    if (!warningBox || !warningText) return;
+    warningBox.style.display = 'block';
+    
+    if (type === 'pro') {
+        // تم مسح الكلمة الزائدة يدوياً - النص المعتمد أدناه:
+        warningText.innerHTML = `
+            <div style="text-align: right; direction: rtl; font-family: 'Arial', sans-serif; line-height: 1.6;">
+                <h3 style="color: #d4af37; border-bottom: 2px solid #d4af37; padding-bottom: 10px; margin-bottom: 15px;">🏆 ميثاق الاحتراف {أ}</h3>
+                
+                <p style="font-weight: bold; color: #ff0000; background: #fff5f5; padding: 10px; border-radius: 5px;">
+                    تحذير: لن تتمكن من إبطال نوع التعاقد والنزول لمستوى هاوي بمجرد الانطلاق.
+                </p>
 
-    // رسم الجدول
-    let tableBody = document.getElementById('coachesTable');
-    tableBody.innerHTML = ""; 
+                <p style="margin-top: 15px;">
+                    اختيارك مسار الاحتراف يعني حفظ مجهودكم كفريق وكفرد؛ حيث يتم تزويد منظومة <b>GFA</b> ببيانات مخصصة عبر عوامل بشرية لتحقن السجلات وتفرز التقييمات بدقة.
+                </p>
 
-    coaches.forEach((coach, index) => {
-        tableBody.innerHTML += `
-            <tr>
-                <td><strong>${coach.name}</strong></td>
-                <td>${coach.specialty}</td>
-                <td><span style="color: #28a745;"><i class="fas fa-check-circle"></i> نشط</span></td>
-                <td>
-                    <button class="delete-btn" onclick="deleteCoach(${index})">
-                        <i class="fas fa-trash-alt"></i> حذف
-                    </button>
-                </td>
-            </tr>
+                <div style="border-right: 4px solid #1a2a6c; background: #f0f4f8; padding: 15px; border-radius: 0 10px 10px 0; margin: 15px 0;">
+                    <p style="margin: 0; color: #1a2a6c; font-weight: bold;">
+                        هنا يسطع نجمك وتفتح سجلاتك التي بُنيت بكل مصداقية لتكشف عن هويتك الحقيقية في درجات متسلسلة.
+                    </p>
+                </div>
+
+                <p style="font-weight: bold; border-top: 1px solid #eee; padding-top: 10px;">
+                    إقرار إداري: هذا السجل هو الوثيقة الرسمية والنهائية المعتمدة داخل المنظومة.
+                </p>
+
+                <strong style="color: red; display: block; text-align: center; border: 2px solid red; padding: 10px; margin-top: 15px; border-radius: 8px;">
+                    ⚠️ لا يمكن التراجع من هذا المسار بعد البدء.
+                </strong>
+            </div>
         `;
-    });
-}
-
-// 3. إضافة مدرب جديد
-function addCoach() {
-    let nameInput = document.getElementById('coachName');
-    let specInput = document.getElementById('coachSpecialty');
-
-    if (nameInput.value.trim() === "" || specInput.value.trim() === "") {
-        alert("يرجى ملء البيانات كاملة يا أمير!");
-        return;
+        warningBox.style.borderRight = "10px solid #d4af37";
+        warningBox.style.boxShadow = "0 8px 25px rgba(212, 175, 55, 0.2)";
+    } else {
+        warningText.innerHTML = `<div style="text-align: right;"><strong>نظام الاستعارة {ب}:</strong> سيتم حذف البيانات فور انتهاء الدوري.</div>`;
+        warningBox.style.borderRight = "5px solid #ff4d4d";
     }
-
-    let coaches = JSON.parse(localStorage.getItem('coaches')) || [];
-    coaches.push({ name: nameInput.value, specialty: specInput.value });
-    localStorage.setItem('coaches', JSON.stringify(coaches));
-
-    nameInput.value = "";
-    specInput.value = "";
-    renderTable();
+    localStorage.setItem('gfa_path', type);
 }
 
-// 4. حذف مدرب
-function deleteCoach(index) {
-    if (confirm("هل تريد حذف هذا المدرب نهائياً؟")) {
-        let coaches = JSON.parse(localStorage.getItem('coaches')) || [];
-        coaches.splice(index, 1);
-        localStorage.setItem('coaches', JSON.stringify(coaches));
-        renderTable();
+// =======================================================
+// --- 3. محرك تشغيل المستعمرة ---
+// =======================================================
+window.onload = function() {
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    if (localStorage.getItem('gfa_gate_locked') === 'true') {
+        const gate = document.getElementById('setup-gate');
+        if (gate) gate.style.display = 'none';
     }
-}
-
-// تشغيل النظام فوراً
-setInterval(updateSalalahTime, 1000);
-updateSalalahTime();
-renderTable();
-// وظيفة محاكاة استقبال بيانات من تطبيق الميدان
-function syncWithProCoach() {
-    console.log("جاري البحث عن بيانات جديدة من الميدان...");
-    // هذه الوظيفة سنطورها لاحقاً لتربط فعلياً بين التطبيق والمركز
-    // حالياً سنضع تنبيهاً بسيطاً لتعرف أن النظام جاهز للربط
-    alert("مركز القيادة الآن في وضع 'الاستعداد' لاستقبال بيانات تطبيق Pro Coach الميداني ✅");
-}
+};
