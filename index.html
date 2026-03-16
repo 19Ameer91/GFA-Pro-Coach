@@ -3,108 +3,142 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GFA Pro Max 2026 - مركز القيادة</title>
+    <title>GFA Pro - الملعب الذهبي التكتيكي</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --gold: #d4af37; --blue: #3b82f6; --red: #ef4444; --dark: #010409; --panel: #0d1117; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--dark); color: white; direction: rtl; margin: 0; padding: 20px; }
-        .container { max-width: 1100px; margin: auto; }
-        
-        /* محرك الوقت */
-        #digital-clock { font-size: 3.5em; color: var(--gold); text-align: center; font-weight: bold; margin-bottom: 25px; text-shadow: 0 0 15px rgba(212, 175, 55, 0.4); }
-        
-        /* منصة التتويج */
-        .leaderboard { background: linear-gradient(135deg, #0f172a, #1e293b); padding: 15px; border-radius: 15px; border: 1px solid var(--gold); margin-bottom: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-        .top-row { display: flex; justify-content: space-around; gap: 10px; margin-top: 10px; }
-        .top-card { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; flex: 1; text-align: center; border-bottom: 3px solid var(--gold); }
+        :root { 
+            --gold: #d4af37; 
+            --pitch-green: #022c0b; 
+            --dark-bg: #010409; 
+            --panel-bg: #0d1117;
+        }
 
-        /* لوحة التحكم */
-        .panel { background: var(--panel); padding: 20px; border-radius: 15px; border: 1px solid #30363d; margin-bottom: 20px; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background: var(--dark-bg); 
+            color: white; 
+            direction: rtl; 
+            margin: 0; 
+            padding: 20px; 
+        }
+
+        .container { max-width: 1100px; margin: auto; }
+
+        /* --- تصميم الملعب الذهبي التكتيكي --- */
+        .pitch-container {
+            width: 100%;
+            background: var(--pitch-green);
+            height: 400px;
+            border: 4px solid var(--gold);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            position: relative;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.2);
+            overflow: hidden;
+        }
+
+        .pitch-line { position: absolute; border: 2px solid rgba(212, 175, 55, 0.4); }
+        .center-line { height: 100%; width: 1px; left: 50%; top: 0; }
+        .center-circle { 
+            width: 100px; height: 100px; border-radius: 50%; 
+            top: 50%; left: 50%; transform: translate(-50%, -50%); 
+        }
+        .penalty-area-left { width: 150px; height: 250px; left: 0; top: 50%; transform: translateY(-50%); border-left: none; }
+        .penalty-area-right { width: 150px; height: 250px; right: 0; top: 50%; transform: translateY(-50%); border-right: none; }
+        
+        .pitch-title {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            font-size: 5em; font-weight: bold; color: rgba(212, 175, 55, 0.1);
+            pointer-events: none; letter-spacing: 20px;
+        }
+
+        /* --- لوحات التحكم والرادار --- */
+        .panel { background: var(--panel-bg); padding: 20px; border-radius: 15px; border: 1px solid #30363d; margin-bottom: 20px; }
         .input-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-bottom: 15px; }
         input, select { padding: 12px; background: #161b22; border: 1px solid #30363d; color: white; border-radius: 8px; outline: none; }
-        .main-btn { width: 100%; padding: 15px; background: var(--gold); color: black; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 1.1em; transition: 0.3s; }
+        
+        .main-btn { width: 100%; padding: 15px; background: var(--gold); color: black; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .main-btn:hover { background: #fdbb2d; transform: scale(1.01); }
 
-        /* الرادار الميداني */
         #players-match-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; }
-        .player-card { padding: 20px; border-radius: 15px; text-align: center; transition: 0.3s; position: relative; border: 2px solid rgba(255,255,255,0.2); }
-        
-        /* غرفة الـ VAR */
-        .var-room { background: #020617; padding: 15px; border-radius: 12px; border-right: 4px solid #fbbf24; max-height: 200px; overflow-y: auto; margin-top: 25px; }
-        #var-logs { font-family: monospace; font-size: 0.9em; }
+        .player-card { padding: 20px; border-radius: 15px; border: 2px solid rgba(255,255,255,0.2); text-align: center; transition: 0.4s; }
 
-        /* شريط الأنباء */
-        #ticker { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--gold); color: black; padding: 8px 0; font-weight: bold; overflow: hidden; z-index: 1000; }
-        .ticker-move { display: inline-block; white-space: nowrap; animation: move 30s linear infinite; padding-left: 100%; }
+        /* --- منصة التتويج --- */
+        .leaderboard { background: linear-gradient(135deg, #0f172a, #1e293b); padding: 15px; border-radius: 15px; border: 1px solid var(--gold); margin-bottom: 20px; display: flex; justify-content: space-around; gap: 10px; }
+        .top-card { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 10px; flex: 1; text-align: center; border-bottom: 3px solid var(--gold); }
+
+        .var-room { background: #020617; padding: 15px; border-radius: 12px; border-right: 4px solid #fbbf24; max-height: 150px; overflow-y: auto; margin-top: 20px; font-family: monospace; }
+        
+        #ticker { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--gold); color: black; padding: 8px 0; font-weight: bold; overflow: hidden; }
+        .ticker-move { display: inline-block; white-space: nowrap; animation: move 25s linear infinite; padding-left: 100%; }
         @keyframes move { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div id="digital-clock">00:00:00</div>
+    <h2 style="text-align: center; color: var(--gold); margin-bottom: 5px;">🛰️ GFA PRO MAX - مركز القيادة</h2>
+    <div id="digital-clock" style="text-align: center; font-size: 1.5em; margin-bottom: 20px; color: var(--gold);">00:00:00</div>
 
-    <div class="leaderboard">
-        <h3 style="margin: 0; text-align: center; color: var(--gold);"><i class="fas fa-crown"></i> منصة تتويج المستعمرة</h3>
-        <div id="top-players" class="top-row">
-            <p style="opacity:0.5; width:100%; text-align:center;">في انتظار انطلاق الملحمة الميدانية...</p>
-        </div>
+    <div class="pitch-container">
+        <div class="pitch-title">GFA</div>
+        <div class="pitch-line center-line"></div>
+        <div class="pitch-line center-circle"></div>
+        <div class="pitch-line penalty-area-left"></div>
+        <div class="pitch-line penalty-area-right"></div>
+    </div>
+
+    <div id="top-players" class="leaderboard">
+        <p style="opacity: 0.5;">في انتظار تسجيل الأداء...</p>
     </div>
 
     <div class="panel">
         <div class="input-grid">
-            <input type="text" id="p-name" placeholder="الاسم الثلاثي">
+            <input type="text" id="p-name" placeholder="اسم المحترف">
             <input type="text" id="p-id" placeholder="الرقم المدني">
             <input type="number" id="p-kit" placeholder="الرقم">
             <select id="p-pos">
-                <option value="GK">حارس مرمى 🧤</option>
-                <option value="DEF">مدافع 🛡️</option>
-                <option value="MID">وسط 👟</option>
-                <option value="FWD">مهاجم ⚽</option>
+                <option value="GK">حارس مرمى</option>
+                <option value="DEF">مدافع</option>
+                <option value="MID">وسط</option>
+                <option value="FWD">مهاجم</option>
             </select>
         </div>
-        <div style="display: flex; gap: 12px; margin-bottom: 15px; align-items: center;">
-            <label>هوية الفريق:</label>
+        <div style="display: flex; gap: 10px; margin-bottom: 15px;">
             <input type="color" id="c1" value="#d4af37">
             <input type="color" id="c2" value="#1a2a6c">
-            <button onclick="clearSystem()" style="background: var(--red); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold;">تصفير شامل 🗑️</button>
+            <button onclick="clearAll()" style="background: #ef4444; color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer;">تصفير شامل 🗑️</button>
         </div>
-        <button class="main-btn" onclick="register()">تثبيت وتدشين في الرادار الموحد ✅</button>
+        <button class="main-btn" onclick="register()">تثبيت وتدشين في الميدان ✅</button>
     </div>
 
-    <div class="panel" style="border-top: 4px solid var(--red);">
-        <h3 style="color: #f87171; margin-top: 0;"><i class="fas fa-satellite-dish"></i> الرادار الميداني المباشر (LIVE)</h3>
+    <div class="panel" style="border-top: 4px solid #ef4444;">
+        <h3 style="color: #f87171; margin-top: 0;">🛰️ الرادار الميداني المباشر</h3>
         <div id="players-match-list"></div>
     </div>
 
-    <div class="var-room">
-        <div style="color: #fbbf24; margin-bottom: 10px; font-weight: bold;"><i class="fas fa-video"></i> سجل الـ VAR التاريخي:</div>
-        <div id="var-logs"></div>
+    <div class="var-room" id="var-logs">
+        <div style="color: #fbbf24; margin-bottom: 5px;">🎥 سجل الـ VAR المباشر:</div>
     </div>
 </div>
 
-<div id="ticker"><div class="ticker-move" id="ticker-content">📡 نظام GFA Pro Max نشط.. في انتظار حقن البيانات الميدانية..</div></div>
+<div id="ticker"><div class="ticker-move" id="ticker-content">📡 نظام GFA PRO نشط...</div></div>
 
 <script>
-    // --- المحرك الموحد المتحد ---
-
-    // 1. محرك الوقت
+    // --- محرك التشغيل ---
     setInterval(() => {
-        const clock = document.getElementById('digital-clock');
-        if(clock) clock.innerText = new Date().toLocaleTimeString('ar-SA');
+        document.getElementById('digital-clock').innerText = new Date().toLocaleTimeString('ar-SA');
     }, 1000);
 
-    // 2. محرك التسجيل (تجاوز القيود)
     function register() {
         const name = document.getElementById('p-name').value;
         const id = document.getElementById('p-id').value;
         const kit = document.getElementById('p-kit').value;
-
-        if(!name || !id || !kit) return alert("⚠️ القائد: يرجى إكمال كافة الحقول!");
+        if(!name || !id || !kit) return alert("أكمل البيانات!");
 
         const player = {
-            uid: id + Math.random(), // لضمان قبول التكرار برمجياً
-            name, id, kit,
+            uid: id + Math.random(),
+            name, kit,
             pos: document.getElementById('p-pos').value,
             c1: document.getElementById('c1').value,
             c2: document.getElementById('c2').value,
@@ -115,137 +149,98 @@
         let db = JSON.parse(localStorage.getItem('gfa_db')) || [];
         db.push(player);
         localStorage.setItem('gfa_db', JSON.stringify(db));
-        
         render();
-        alert("✅ تم تدشين اللاعب: " + name);
-        document.getElementById('p-name').value = '';
-        document.getElementById('p-id').value = '';
+        alert("✅ تم التثبيت!");
     }
 
-    // 3. محرك العرض الميداني (يشمل نظام الطرد والتبديل)
     function render() {
         const list = document.getElementById('players-match-list');
         let db = JSON.parse(localStorage.getItem('gfa_db')) || [];
         list.innerHTML = '';
 
         db.forEach((p, index) => {
-            const isLegend = (p.points >= 100);
             const card = document.createElement('div');
             card.className = 'player-card';
+            if(p.isOut) card.style.background = "#1a1a1a";
+            else if(p.isSub) card.style.background = "#0f172a";
+            else card.style.background = `linear-gradient(135deg, ${p.c1}, ${p.c2})`;
             
-            // تصميم الحالة
-            if(p.isOut) {
-                card.style = "background: #1a1a1a; border: 2px solid var(--red); opacity: 0.6; padding: 20px; border-radius: 15px; text-align: center;";
-            } else if(p.isSub) {
-                card.style = "background: #0f172a; border: 2px solid var(--blue); opacity: 0.7; padding: 20px; border-radius: 15px; text-align: center;";
-            } else {
-                const glow = isLegend ? 'box-shadow: 0 0 25px var(--gold); border: 2px solid #fff;' : 'border: 2px solid rgba(255,255,255,0.4);';
-                card.style = `background: linear-gradient(135deg, ${p.c1}, ${p.c2}); padding: 20px; border-radius: 15px; text-align: center; color: white; ${glow}`;
-            }
+            if(p.points >= 100 && !p.isOut) card.style.boxShadow = "0 0 20px var(--gold)";
 
             card.innerHTML = `
-                <div style="font-size: 2em; font-weight: bold;">${p.isOut ? '⛔' : (p.isSub ? '🔄' : '#' + p.kit)}</div>
-                <div style="font-weight: bold; margin: 10px 0;">${p.name}</div>
-                <div style="font-size: 0.8em; opacity: 0.9; margin-bottom: 10px;">${p.pos}</div>
-                
-                <div style="background: white; color: black; font-weight: bold; padding: 8px; border-radius: 8px; margin-bottom: 15px; font-size: 1.2em;">
-                    ${p.isOut ? 'مطرود 🟥' : (p.isSub ? 'مستبدل 🔄' : (isLegend ? '🔥 ' : '') + p.rating)}
+                <div style="font-size: 1.5em; font-weight: bold;">${p.isOut?'⛔':p.isSub?'🔄':'#'+p.kit}</div>
+                <div style="font-weight: bold;">${p.name}</div>
+                <div style="background: white; color: black; padding: 5px; border-radius: 5px; margin: 10px 0; font-weight: bold;">
+                    ${p.isOut?'مطرود 🟥':p.isSub?'مستبدل 🔄':p.rating}
                 </div>
-
                 ${(!p.isOut && !p.isSub) ? `
-                    <select onchange="handleAction(${index}, this)" style="width: 100%; padding: 10px; border-radius: 8px; font-weight: bold; margin-bottom: 8px;">
+                    <select onchange="action(${index}, this)" style="width: 100%; margin-bottom: 5px;">
                         <option value="">➕ تسجيل فعل...</option>
-                        <optgroup label="🧤 الحارس والدفاع">
-                            <option value="15">صد ضربة جزاء (+15)</option>
-                            <option value="7">صد كرة خطيرة (+7)</option>
-                            <option value="8">تخليص هدف (+8)</option>
-                        </optgroup>
-                        <optgroup label="⚽ الهجوم والوسط">
-                            <option value="10">تسجيل هدف (+10)</option>
-                            <option value="6">صناعة هدف (+6)</option>
-                        </optgroup>
-                        <optgroup label="⚠️ العقوبات">
-                            <option value="-5">كرت أصفر (-5)</option>
-                            <option value="RED">طرد مباشر 🟥</option>
-                        </optgroup>
+                        <option value="15">صد ضربة جزاء (+15)</option>
+                        <option value="10">هدف (+10)</option>
+                        <option value="RED">طرد مباشر 🟥</option>
                     </select>
-
-                    <button onclick="handleSub(${index})" style="width: 100%; background: var(--blue); color: white; border: none; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: bold; display: flex; align-items: center; justify-content: center; gap: 8px;">
-                        🔄 تبديل هذا اللاعب
-                    </button>
-                ` : `<div style="font-weight:bold; color:var(--red); padding: 10px;">انتهت المهمة الميدانية</div>`}
+                    <button onclick="sub(${index})" style="width: 100%; background: #3b82f6; color: white; border: none; padding: 8px; border-radius: 8px; cursor: pointer; font-weight: bold;">🔄 تبديل لاعب</button>
+                ` : ''}
             `;
             list.appendChild(card);
         });
-        updateLeaderboard();
+        updateBoard();
     }
 
-    // 4. محرك النقاط والـ VAR
-    function handleAction(idx, select) {
-        const val = select.value;
-        if(!val) return;
+    function action(idx, select) {
         let db = JSON.parse(localStorage.getItem('gfa_db')) || [];
         let p = db[idx];
-
-        if(val === "RED") {
+        if(select.value === "RED") {
             p.isOut = true;
             addLog(p.name, "طرد مباشر 🟥", -20);
         } else {
-            const pts = parseInt(val);
+            const pts = parseInt(select.value);
             p.points += pts;
             p.rating = Math.max(p.points, 0) + "%";
-            const actionText = select.options[select.selectedIndex].text;
-            addLog(p.name, actionText, pts);
+            addLog(p.name, select.options[select.selectedIndex].text, pts);
         }
-
         localStorage.setItem('gfa_db', JSON.stringify(db));
         render();
     }
 
-    // 5. محرك التبديلات
-    function handleSub(idx) {
+    function sub(idx) {
+        if(!confirm("تأكيد التبديل؟")) return;
         let db = JSON.parse(localStorage.getItem('gfa_db')) || [];
-        if(confirm(`هل تؤكد خروج ${db[idx].name} للتبديل؟`)) {
-            db[idx].isSub = true;
-            addLog(db[idx].name, "خروج (تبديل تكتيكي) 🔄", 0);
-            localStorage.setItem('gfa_db', JSON.stringify(db));
-            render();
-        }
+        db[idx].isSub = true;
+        addLog(db[idx].name, "خروج (تبديل) 🔄", 0);
+        localStorage.setItem('gfa_db', JSON.stringify(db));
+        render();
     }
 
-    // 6. محرك سجل الـ VAR
     function addLog(name, act, pts) {
         const log = document.getElementById('var-logs');
-        const div = document.createElement('div');
-        div.style = "border-bottom: 1px solid rgba(255,255,255,0.1); padding: 8px 0; display: flex; justify-content: space-between;";
-        const time = new Date().toLocaleTimeString('ar-SA', {hour: '2-digit', minute:'2-digit'});
-        div.innerHTML = `<span>[${time}] <b>${name}</b>: ${act}</span> <span style="color:${pts>=0?'#22c55e':'#ef4444'}">${pts>0?'+':''}${pts}%</span>`;
-        log.prepend(div);
+        const d = document.createElement('div');
+        d.innerHTML = `[${new Date().toLocaleTimeString('ar-SA')}] ${name}: ${act} (${pts}%)`;
+        log.prepend(d);
     }
 
-    // 7. محرك منصة التتويج والموجز
-    function updateLeaderboard() {
+    function updateBoard() {
         let db = JSON.parse(localStorage.getItem('gfa_db')) || [];
         const board = document.getElementById('top-players');
         const ticker = document.getElementById('ticker-content');
-        
-        // ترتيب النشطين فقط
-        let sorted = [...db].filter(p => !p.isOut && !p.isSub).sort((a,b) => b.points - a.points).slice(0, 3);
+        let sorted = [...db].filter(x => !x.isOut).sort((a,b) => b.points - a.points).slice(0, 3);
         
         if(sorted.length > 0) {
             board.innerHTML = sorted.map((p, i) => `
                 <div class="top-card">
-                    <div style="font-size: 1.5em;">${i==0?'🏆':i==1?'🥈':'🥉'}</div>
-                    <div style="font-weight: bold; font-size: 0.9em;">${p.name}</div>
-                    <div style="color: var(--gold); font-weight: bold;">${p.rating}</div>
+                    <div>${i==0?'🏆':i==1?'🥈':'🥉'}</div>
+                    <div style="font-weight: bold; font-size: 0.8em;">${p.name} ${p.isSub?'(🔄)':''}</div>
+                    <div style="color: var(--gold);">${p.rating}</div>
                 </div>
             `).join('');
-            ticker.innerText = db.map(p => ` 🌟 [${p.name}] ${p.isOut?'🟥':(p.isSub?'🔄':p.rating)} `).join(" --- ");
+            ticker.innerText = db.map(p => ` 🌟 [${p.name}] ${p.rating} `).join(" --- ");
         }
     }
 
-    function clearSystem() { if(confirm("تصفير شامل لكل الرادار؟")) { localStorage.clear(); location.reload(); } }
+    function clearAll() { if(confirm("تصفير شامل؟")) { localStorage.clear(); location.reload(); } }
     window.onload = render;
 </script>
+
 </body>
 </html>
