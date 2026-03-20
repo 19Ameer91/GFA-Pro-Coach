@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>GFA Sovereign - رادار المشرف 📡</title>
+    <style>
+        body { background: #050505; color: #d4af37; font-family: 'Segoe UI', sans-serif; padding: 20px; }
+        .dashboard { max-width: 900px; margin: auto; }
+        h1 { border-bottom: 2px solid #d4af37; padding-bottom: 10px; text-align: center; }
+        .player-card { 
+            background: #111; border: 1px solid #333; padding: 15px; 
+            margin-bottom: 10px; border-radius: 10px; display: flex; 
+            justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        .info span { display: block; color: #fff; font-size: 0.9em; }
+        .info b { color: #d4af37; font-size: 1.1em; }
+        .btn-accept { background: #27ae60; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        .btn-delete { background: #c0392b; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; margin-right: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="dashboard">
+    <h1>📡 رادار المراقبة الحية</h1>
+    <div id="players-list">
+        <p style="text-align: center; color: #666;">جاري مسح الميدان بحثاً عن إشارات...</p>
+    </div>
+</div>
+
+<script>
+    const firebaseURL = "https://gfa-sovereign-default-rtdb.firebaseio.com/registrations.json";
+
+    // 🔄 وظيفة جلب البيانات من السحابة
+    async function updateRadar() {
+        try {
+            const response = await fetch(firebaseURL);
+            const data = await response.json();
+            const list = document.getElementById('players-list');
+            list.innerHTML = '';
+
+            if (!data) {
+                list.innerHTML = '<p style="text-align: center;">لا توجد طلبات تسجيل حالياً.</p>';
+                return;
+            }
+
+            for (let id in data) {
+                const p = data[id];
+                list.innerHTML += `
+                    <div class="player-card">
+                        <div class="info">
+                            <b>👤 ${p.fullName}</b>
+                            <span>📞 الهاتف: ${p.mobile}</span>
+                            <span>🎖️ الرتبة: ${p.role}</span>
+                            <span>⏰ توقيت الطلب: ${p.timestamp}</span>
+                        </div>
+                        <div>
+                            <button class="btn-accept" onclick="confirmPlayer('${id}')">قبول ✅</button>
+                            <button class="btn-delete" onclick="rejectPlayer('${id}')">حذف 🗑️</button>
+                        </div>
+                    </div>
+                `;
+            }
+        } catch (e) { console.error("عطل في الرادار"); }
+    }
+
+    // 🗑️ وظيفة حذف/رفض طلب
+    async function rejectPlayer(id) {
+        if(confirm("هل تريد استبعاد هذا الطلب نهائياً؟")) {
+            await fetch(`https://gfa-sovereign-default-rtdb.firebaseio.com/registrations/${id}.json`, { method: 'DELETE' });
+            updateRadar();
+        }
+    }
+
+    // تحديث الرادار كل 5 ثوانٍ تلقائياً
+    setInterval(updateRadar, 5000);
+    updateRadar();
+</script>
+</body>
+</html>
