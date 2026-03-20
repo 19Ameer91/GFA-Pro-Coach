@@ -58,12 +58,13 @@
             <input type="tel" id="user-phone" class="pro-input" placeholder="📞">
 
             <label style="color: #aaa; font-size: 0.8em;">اختر صفتك الرسمية</label>
-            <select id="user-role" class="pro-input" style="border-right: 5px solid #d4af37;">
-                <option value="">-- حدد نوع الحساب --</option>
-                <option value="league_admin">مشرف الدوري</option>
-                <option value="team_coach">مدرب الفريق</option>
-                <option value="football_player">لاعب كرة القدم</option>
-            </select>
+          <select id="user-position" class="gfa-input">
+    <option value="">-- حدد نوع الحساب --</option>
+    <option value="REF">حكم ساحة / مساعد</option>
+    <option value="ADMIN">لجنة تحكيم / مراقب</option>
+    <option value="COACH">مدرب فريق</option>
+    <option value="PLAYER">لاعب كرة قدم</option>
+</select>
         </div>
 
         <button class="btn-gold-pro" onclick="requestActivation()">تنشيط الحساب ⚡</button>
