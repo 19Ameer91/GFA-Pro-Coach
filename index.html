@@ -3,182 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GFA Sovereign - النظام الموحد 🛡️</title>
+    <title>GFA Sovereign - التدشين العالمي 🛡️</title>
     <style>
-        /* --- 🎨 التكتيك الجمالي (CSS) --- */
-        :root { --gold: #d4af37; --pitch-green: #2ecc71; --dark: #0a0a0a; --neon-blue: #00f2ff; }
+        :root { --gold: #d4af37; --pitch-green: #2ecc71; --dark: #0a0a0a; }
         body { background: var(--dark); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; }
         
-        /* شاشة الدخول */
-        #gate-screen { position: fixed; inset: 0; background: radial-gradient(circle, #222 0%, #000 100%); z-index: 1000; display: flex; align-items: center; justify-content: center; }
-        .gate-box { padding: 40px; border: 2px solid var(--gold); border-radius: 20px; text-align: center; background: #000; box-shadow: 0 0 30px rgba(212,175,55,0.2); }
+        /* 📱 شاشة بوابة السيادة الفخمة */
+        #gate-screen { 
+            position: fixed; inset: 0; 
+            background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png'), radial-gradient(circle, #1a3c1a 0%, #050505 100%);
+            z-index: 1000; display: flex; align-items: center; justify-content: center; 
+        }
+        .gate-box { 
+            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); 
+            border: 1px solid rgba(212, 175, 55, 0.3); width: 90%; max-width: 400px; 
+            padding: 30px; border-radius: 25px; text-align: center;
+            box-shadow: 0 0 30px rgba(212,175,55,0.1);
+        }
         
-        /* الهيكل الرئيسي */
-        #main-app { display: none; width: 100%; height: 100%; flex-direction: row; }
-        .sidebar { width: 320px; background: #111; border-left: 1px solid #333; padding: 20px; display: flex; flex-direction: column; }
-        .viewport { flex: 1; display: flex; align-items: center; justify-content: center; background: #1a1a1a; padding: 20px; }
+        .pro-input {
+            width: 100%; background: rgba(255,255,255,0.9); border: none;
+            padding: 12px; border-radius: 8px; box-sizing: border-box;
+            color: #333; font-weight: bold; margin-bottom: 10px;
+        }
 
-        /* الميدان */
-        .pitch-container { position: relative; width: 100%; max-width: 850px; aspect-ratio: 16/9; background: var(--pitch-green); border: 4px solid white; border-radius: 5px; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
-        canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+        .btn-gold-pro {
+            width: 100%; background: linear-gradient(45deg, #d4af37, #f2d06b);
+            color: #000; border: none; padding: 15px; margin-top: 10px;
+            border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s;
+        }
+        .btn-gold-pro:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6); }
 
-        /* الأدوات */
-        .input-box { background: #000; border: 1px solid var(--gold); color: white; padding: 10px; width: 100%; margin-bottom: 10px; border-radius: 5px; }
-        .btn-gold { background: var(--gold); color: black; border: none; padding: 12px; font-weight: bold; cursor: pointer; width: 100%; border-radius: 5px; transition: 0.3s; }
-        .btn-gold:hover { background: #b8962d; box-shadow: 0 0 15px var(--gold); }
-        .radar-log { margin-top: 20px; font-size: 0.85em; border-top: 1px solid #444; padding-top: 10px; }
+        /* الشاشة الرئيسية (تظهر بعد التسجيل) */
+        #main-app { display: none; width: 100%; height: 100%; align-items: center; justify-content: center; }
     </style>
 </head>
 <body>
-<div id="gate-screen" style="background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png'), radial-gradient(circle, #1a3c1a 0%, #050505 100%);">
-    
-    <div class="gate-box" style="background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); border: 1px solid rgba(212, 175, 55, 0.3); width: 90%; max-width: 400px; padding: 30px; border-radius: 25px;">
-        
+
+<div id="gate-screen">
+    <div class="gate-box">
         <div style="text-align: center; margin-bottom: 25px;">
             <h1 style="color: #d4af37; font-size: 2.5em; margin: 0; letter-spacing: 2px;">GFA</h1>
             <p style="color: #fff; letter-spacing: 4px; font-size: 0.8em; margin-top: -5px;">SOVEREIGN</p>
         </div>
 
-        <div class="input-group">
-            <label style="color: #aaa; font-size: 0.8em; display: block; margin-bottom: 5px;">الاسم الثلاثي</label>
+        <div class="input-group" style="text-align: right;">
+            <label style="color: #aaa; font-size: 0.8em;">الاسم الثلاثي</label>
             <input type="text" id="full-name" class="pro-input" placeholder="👤">
             
-            <label style="color: #aaa; font-size: 0.8em; display: block; margin-top: 15px; margin-bottom: 5px;">رقم الوثيقة الوطنية</label>
+            <label style="color: #aaa; font-size: 0.8em;">رقم الوثيقة الوطنية</label>
             <input type="text" id="national-id" class="pro-input" placeholder="🆔">
             
-            <label style="color: #aaa; font-size: 0.8em; display: block; margin-top: 15px; margin-bottom: 5px;">رقم الهاتف النقال</label>
+            <label style="color: #aaa; font-size: 0.8em;">رقم الهاتف النقال</label>
             <input type="tel" id="user-phone" class="pro-input" placeholder="📞">
-            
 
-
-<label style="color: #aaa; font-size: 0.8em; display: block; margin-top: 15px; margin-bottom: 5px;">البريد الإلكتروني</label>
-<input type="email" id="user-email" class="pro-input" placeholder="✉️">
-
-<label style="color: #aaa; font-size: 0.8em; display: block; margin-top: 15px; margin-bottom: 5px;">اختر صفتك الرسمية في المنظومة</label>
-<select id="user-role" class="pro-input" style="border-right: 5px solid #d4af37;">
-    <option value="">-- حدد نوع الحساب --</option>
-    <option value="league_admin">1️⃣ مشرف الدوري</option>
-    <option value="referee_committee">2️⃣ لجنة الحكام</option>
-    <option value="team_manager">3️⃣ مدير الفريق</option>
-    <option value="team_coach">4️⃣ مدرب الفريق</option>
-    <option value="football_player">5️⃣ لاعب كرة القدم</option>
-</select>
-<div style="margin-top: 25px; text-align: center;">
-    <p style="color: #fff; font-size: 0.85em; margin-bottom: 15px;">إرسال كود لتثبيت رتبتك</p>
-    </div> </div>
-
-        <div style="margin-top: 25px; text-align: center;">
-            <p style="color: #fff; font-size: 0.85em; margin-bottom: 15px;">إرسال كود لتثبيت مركزك</p>
-            <div style="display: flex; justify-content: center; gap: 20px; color: #fff;">
-                <label><input type="radio" name="otp-type" value="email" checked> البريد ✉️</label>
-                <label><input type="radio" name="otp-type" value="phone"> الهاتف 📱</label>
-            </div>
+            <label style="color: #aaa; font-size: 0.8em;">اختر صفتك الرسمية</label>
+            <select id="user-role" class="pro-input" style="border-right: 5px solid #d4af37;">
+                <option value="">-- حدد نوع الحساب --</option>
+                <option value="league_admin">مشرف الدوري</option>
+                <option value="team_coach">مدرب الفريق</option>
+                <option value="football_player">لاعب كرة القدم</option>
+            </select>
         </div>
 
         <button class="btn-gold-pro" onclick="requestActivation()">تنشيط الحساب ⚡</button>
     </div>
 </div>
 
-<style>
-    .pro-input {
-        width: 100%;
-        background: rgba(255,255,255,0.9);
-        border: none;
-        padding: 12px;
-        border-radius: 8px;
-        box-sizing: border-box;
-        color: #333;
-        font-weight: bold;
-    }
-    .btn-gold-pro {
-        width: 100%;
-        background: linear-gradient(45deg, #d4af37, #f2d06b);
-        color: #000;
-        border: none;
-        padding: 15px;
-        margin-top: 20px;
-        border-radius: 12px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: 0.3s;
-        box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
-    }
-    .btn-gold-pro:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6); }
-</style>
-    <script>
-        /* --- ⚙️ المحرك البرمجي الموحد (JS) --- */
-        const canvas = document.getElementById('pitch-canvas');
-        const ctx = canvas.getContext('2d');
-        const frame = document.getElementById('pitch-frame');
+<div id="main-app">
+    <h2 style="color: var(--gold);">تم تفعيل النظام بنجاح يا قائد.. الميدان تحت سيطرتك!</h2>
+</div>
 
-        // 1. رسم الميدان القانوني (ترميم الخطوط)
-        function drawPitch() {
-            canvas.width = frame.clientWidth;
-            canvas.height = frame.clientHeight;
-            const w = canvas.width; const h = canvas.height;
+<script>
+    // 📡 محرك السحابة العالمي
+    const firebaseURL = "https://gfa-sovereign-default-rtdb.firebaseio.com/registrations.json";
 
-            ctx.clearRect(0, 0, w, h);
-            ctx.strokeStyle = "white"; ctx.lineWidth = 3;
+    async function requestActivation() {
+        // جلب البيانات
+        const name = document.getElementById('full-name').value;
+        const id = document.getElementById('national-id').value;
+        const phone = document.getElementById('user-phone').value;
+        const role = document.getElementById('user-role').value;
 
-            // الخطوط الأساسية
-            ctx.strokeRect(5, 5, w-10, h-10);
-            ctx.beginPath(); ctx.moveTo(w/2, 5); ctx.lineTo(w/2, h-5); ctx.stroke();
-            ctx.beginPath(); ctx.arc(w/2, h/2, 50, 0, Math.PI*2); ctx.stroke();
-
-            // منطقة الجزاء (يسار ويمين) مع الأقواس الخارجية
-            const boxW = w * 0.15; const boxH = h * 0.6;
-            ctx.strokeRect(5, h*0.2, boxW, boxH); // يسار
-            ctx.strokeRect(w-boxW-5, h*0.2, boxW, boxH); // يمين
-
-            // الأقواس القانونية خارج المنطقة
-            ctx.beginPath(); ctx.arc(boxW+5, h/2, 40, -Math.PI/2.5, Math.PI/2.5); ctx.stroke();
-            ctx.beginPath(); ctx.arc(w-boxW-5, h/2, 40, Math.PI*0.6, Math.PI*1.4); ctx.stroke();
+        // فحص الأمان
+        if(!name || !phone || !role) {
+            alert("⚠️ يا قائد، املأ البيانات الأساسية أولاً!");
+            return;
         }
 
-        // 2. نظام الصلاحيات والربط
-        function accessSystem() {
-            const key = document.getElementById('gate-key').value;
-            if(key === "111" || key === "999") {
+        const playerData = {
+            fullName: name,
+            nationalID: id,
+            mobile: phone,
+            role: role,
+            timestamp: new Date().toLocaleString()
+        };
+
+        try {
+            // إرسال للسحابة
+            const response = await fetch(firebaseURL, {
+                method: 'POST',
+                body: JSON.stringify(playerData)
+            });
+
+            if(response.ok) {
+                alert("🚀 تم استلام بياناتك بنجاح! جاري تنشيط رتبتك...");
                 document.getElementById('gate-screen').style.display = 'none';
                 document.getElementById('main-app').style.display = 'flex';
-                
-                if(key === "111") {
-                    document.getElementById('role-display').innerText = "👨‍🏫 واجهة المدرب";
-                    document.getElementById('coach-tools').style.display = 'block';
-                } else {
-                    document.getElementById('role-display').innerText = "🛡️ واجهة المشرف";
-                    document.getElementById('admin-tools').style.display = 'block';
-                    startMonitoring(); // بدء المراقبة الحية
-                }
-                setTimeout(drawPitch, 200);
-            } else { alert("الكود غير صحيح يا قائد!"); }
+            } else {
+                alert("❌ خطأ في السيرفر العالمي");
+            }
+        } catch (error) {
+            alert("⚠️ فشل الاتصال.. تأكد من الإنترنت!");
         }
+    }
+</script>
 
-        // 3. بروتوكول الإرسال (المدرب)
-        function broadcastSignal() {
-            const msg = document.getElementById('coach-msg').value;
-            const data = { text: msg, time: new Date().toLocaleTimeString(), status: "✅ تم الرصد" };
-            localStorage.setItem('GFA_SIGNAL', JSON.stringify(data));
-            alert("🚀 تم بث الإشارة لجميع المشرفين!");
-        }
-
-        // 4. بروتوكول الاستقبال الحي (المشرف)
-        function startMonitoring() {
-            setInterval(() => {
-                const signal = localStorage.getItem('GFA_SIGNAL');
-                if(signal) {
-                    const data = JSON.parse(signal);
-                    document.getElementById('radar-feed').innerHTML = `
-                        <div style="color:var(--gold); border:1px dashed var(--gold); padding:10px;">
-                            📍 إشارة ملتقطة: "${data.text}"<br>
-                            🕒 التوقيت: ${data.time}<br>
-                            ⭐ التقييم: ${data.status}
-                        </div>`;
-                }
-            }, 1000);
-        }
-
-        window.onresize = drawPitch;
-    </script>
 </body>
 </html>
