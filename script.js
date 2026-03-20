@@ -1,38 +1,41 @@
-// --- 1. محرك السحابة والتسجيل الجديد (يبدأ من السطر 1) ---
-const firebaseRegisterURL = "https://gfa-sovereign-default-rtdb.firebaseio.com/registrations.json";
+// 📡 1. الرادار السحابي (الرابط العالمي)
+const firebaseURL = "https://procoach-40d9f-default-rtdb.firebaseio.com/registrations.json";
 
+// 🚀 2. محرك التنشيط والفرز (حكم، لاعب، مدرب، مشرف)
 async function requestActivation() {
     const fullName = document.getElementById('full-name').value;
-    const nationalID = document.getElementById('national-id').value;
     const phone = document.getElementById('user-phone').value;
-    const position = document.getElementById('user-position').value;
+    const role = document.getElementById('user-position').value;
 
-    if (!fullName || !nationalID || !phone || !position) {
-        return alert("⚠️ يا قائد، املأ البيانات الاستراتيجية أولاً!");
+    if (!fullName || !phone || !role) {
+        alert("⚠️ يا قائد، املأ البيانات لاختيار (الحكم أو اللاعب)!");
+        return;
     }
 
-    const playerData = {
+    const userData = {
         name: fullName,
-        id_card: nationalID,
         mobile: phone,
-        player_pos: position,
-        reg_date: new Date().toLocaleString()
+        position: role,
+        timestamp: new Date().toLocaleString()
     };
 
     try {
-        const response = await fetch(firebaseRegisterURL, {
+        const response = await fetch(firebaseURL, {
             method: 'POST',
-            body: JSON.stringify(playerData)
+            body: JSON.stringify(userData)
         });
+
         if (response.ok) {
-    alert("🚀 تم استلام بياناتك بنجاح! جاري المراجعة...");
-    document.getElementById('gate-screen').style.display = 'none'; // هذا السطر لفتح الميدان فوراً
-}
-    } catch (e) { 
-        alert("❌ خطأ في الاتصال بالسحابة"); 
+            alert("✅ تم إرسال البيانات للسحابة بنجاح! راقب شاشة Firebase الآن.");
+            // إخفاء بوابة الدخول وفتح الميدان
+            document.getElementById('gate-screen').style.display = 'none';
+        } else {
+            alert("❌ فشل السيرفر، تأكد من إعدادات Rules في Firebase");
+        }
+    } catch (error) {
+        alert("⚠️ عطل في الاتصال، تأكد من الإنترنت!");
     }
 }
-
 // --- 2. كود رسم الملعب (أبقهِ كما هو تحت كود التسجيل) ---
 function drawPitch() {
     // هنا كود الرسم القديم الخاص بك (canvas, context... إلخ)
