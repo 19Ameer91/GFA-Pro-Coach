@@ -1,21 +1,35 @@
-// 📡 1. الرادار السحابي (الرابط العالمي)
+// 1. رابط الرادار الخاص بك (تأكد من وجود .json في النهاية)
 const firebaseURL = "https://procoach-40d9f-default-rtdb.firebaseio.com/registrations.json";
 
-// 🚀 2. محرك التنشيط والفرز (حكم، لاعب، مدرب، مشرف)
+// 2. المحرك الرئيسي للتنشيط
 async function requestActivation() {
-    const fullName = document.getElementById('full-name').value;
-    const phone = document.getElementById('user-phone').value;
-    const position = document.getElementById('user-position').value;
+    console.log("محاولة التنشيط بدأت..."); // سطر للفحص
 
-    if (!fullName || !phone || !position) {
-        alert("⚠️ يا قائد، الحكام واللاعبين بانتظار إتمام البيانات!");
+    // جلب العناصر من الواجهة
+    const nameEl = document.getElementById('full-name');
+    const phoneEl = document.getElementById('user-phone');
+    const roleEl = document.getElementById('user-position');
+
+    // التأكد من وجود العناصر في الصفحة
+    if (!nameEl || !phoneEl || !roleEl) {
+        console.error("عناصر الإدخال غير موجودة في الـ HTML!");
+        return;
+    }
+
+    const fullName = nameEl.value;
+    const phone = phoneEl.value;
+    const role = roleEl.value;
+
+    // فحص الحقول الفارغة
+    if (!fullName || !phone || !role) {
+        alert("⚠️ يا قائد، املأ البيانات لاختيار (المشرف أو اللاعب)!");
         return;
     }
 
     const userData = {
         name: fullName,
         mobile: phone,
-        role: position, // هنا سيتم تخزين (حكم، لاعب، مدرب)
+        position: role,
         timestamp: new Date().toLocaleString()
     };
 
@@ -26,15 +40,14 @@ async function requestActivation() {
         });
 
         if (response.ok) {
-            let message = "✅ تم تسجيلك بنجاح!";
-            if(position === 'REF') message = "⚖️ أهلاً بك يا قاضي الملاعب، تم استلام بياناتك!";
-            if(position === 'ADMIN') message = "🛡️ تم اعتماد دخول لجنة التحكيم بنجاح!";
-            
-            alert(message);
+            alert("✅ تم إرسال البيانات للسحابة بنجاح! راقب شاشة Firebase الآن.");
             document.getElementById('gate-screen').style.display = 'none';
+        } else {
+            alert("❌ فشل السيرفر، تأكد من إعدادات Rules في Firebase");
         }
-    } catch (e) {
-        alert("❌ تعطلت عربة الحكام في السيرفر! تأكد من قواعد Firebase");
+    } catch (error) {
+        console.error("خطأ في الاتصال:", error);
+        alert("⚠️ عطل في الاتصال، تأكد من الإنترنت!");
     }
 }
 // --- 2. كود رسم الملعب (أبقهِ كما هو تحت كود التسجيل) ---
