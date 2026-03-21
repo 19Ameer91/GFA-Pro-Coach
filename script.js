@@ -5,17 +5,17 @@ const firebaseURL = "https://procoach-40d9f-default-rtdb.firebaseio.com/registra
 async function requestActivation() {
     const fullName = document.getElementById('full-name').value;
     const phone = document.getElementById('user-phone').value;
-    const role = document.getElementById('user-position').value;
+    const position = document.getElementById('user-position').value;
 
-    if (!fullName || !phone || !role) {
-        alert("⚠️ يا قائد، املأ البيانات لاختيار (الحكم أو اللاعب)!");
+    if (!fullName || !phone || !position) {
+        alert("⚠️ يا قائد، الحكام واللاعبين بانتظار إتمام البيانات!");
         return;
     }
 
     const userData = {
         name: fullName,
         mobile: phone,
-        position: role,
+        role: position, // هنا سيتم تخزين (حكم، لاعب، مدرب)
         timestamp: new Date().toLocaleString()
     };
 
@@ -26,14 +26,15 @@ async function requestActivation() {
         });
 
         if (response.ok) {
-            alert("✅ تم إرسال البيانات للسحابة بنجاح! راقب شاشة Firebase الآن.");
-            // إخفاء بوابة الدخول وفتح الميدان
+            let message = "✅ تم تسجيلك بنجاح!";
+            if(position === 'REF') message = "⚖️ أهلاً بك يا قاضي الملاعب، تم استلام بياناتك!";
+            if(position === 'ADMIN') message = "🛡️ تم اعتماد دخول لجنة التحكيم بنجاح!";
+            
+            alert(message);
             document.getElementById('gate-screen').style.display = 'none';
-        } else {
-            alert("❌ فشل السيرفر، تأكد من إعدادات Rules في Firebase");
         }
-    } catch (error) {
-        alert("⚠️ عطل في الاتصال، تأكد من الإنترنت!");
+    } catch (e) {
+        alert("❌ تعطلت عربة الحكام في السيرفر! تأكد من قواعد Firebase");
     }
 }
 // --- 2. كود رسم الملعب (أبقهِ كما هو تحت كود التسجيل) ---
