@@ -8,7 +8,6 @@
         :root { --gold: #d4af37; --pitch-green: #2ecc71; --dark: #0a0a0a; }
         body { background: var(--dark); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; }
         
-        /* 📱 شاشة بوابة السيادة الفخمة */
         #gate-screen { 
             position: fixed; inset: 0; 
             background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png'), radial-gradient(circle, #1a3c1a 0%, #050505 100%);
@@ -24,7 +23,7 @@
         .pro-input {
             width: 100%; background: rgba(255,255,255,0.9); border: none;
             padding: 12px; border-radius: 8px; box-sizing: border-box;
-            color: #333; font-weight: bold; margin-bottom: 10px;
+            color: #333; font-weight: bold; margin-bottom: 10px; text-align: right;
         }
 
         .btn-gold-pro {
@@ -34,8 +33,7 @@
         }
         .btn-gold-pro:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6); }
 
-        /* الشاشة الرئيسية (تظهر بعد التسجيل) */
-        #main-app { display: none; width: 100%; height: 100%; align-items: center; justify-content: center; }
+        #main-app { display: none; width: 100%; height: 100%; align-items: center; justify-content: center; text-align: center; }
     </style>
 </head>
 <body>
@@ -58,12 +56,13 @@
             <input type="tel" id="user-phone" class="pro-input" placeholder="📞">
 
             <label style="color: #aaa; font-size: 0.8em;">اختر صفتك الرسمية</label>
-         <select id="user-position" class="gfa-input">
-    <option value="">-- حدد نوع الحساب --</option>
-    <option value="ADMIN">مشرف الدوري (المسؤول)</option> <option value="REF">لجنة التحكيم / حكم</option>
-    <option value="COACH">مدرب الفريق</option>
-    <option value="PLAYER">لاعب كرة قدم</option>
-</select>
+            <select id="user-position" class="pro-input" style="height: 45px;">
+                <option value="">-- حدد نوع الحساب --</option>
+                <option value="ADMIN">مشرف الدوري (المسؤول)</option> 
+                <option value="REF">لجنة التحكيم / حكم</option>
+                <option value="COACH">مدرب الفريق</option>
+                <option value="PLAYER">لاعب كرة قدم</option>
+            </select>
         </div>
 
         <button class="btn-gold-pro" onclick="requestActivation()">تنشيط الحساب ⚡</button>
@@ -71,47 +70,48 @@
 </div>
 
 <div id="main-app">
-    <h2 style="color: var(--gold);">تم تفعيل النظام بنجاح يا قائد.. الميدان تحت سيطرتك!</h2>
+    <h2 style="color: var(--gold); font-size: 2em;">✅ تم تفعيل النظام بنجاح يا قائد!<br>الميدان تحت سيطرتك الآن.</h2>
 </div>
 
 <script>
-    // 📡 محرك السحابة العالمي
-    const firebaseURL = "https://gfa-sovereign-default-rtdb.firebaseio.com/registrations.json";
+    // 📡 الرابط الصحيح الخاص بك (procoach)
+    const firebaseURL = "https://procoach-40d9f-default-rtdb.firebaseio.com/registrations.json";
 
     async function requestActivation() {
-        // جلب البيانات
+        console.log("بدء التنشيط...");
+
+        // جلب البيانات مع التأكد من مطابقة الـ IDs
         const name = document.getElementById('full-name').value;
-        const id = document.getElementById('national-id').value;
+        const nationalId = document.getElementById('national-id').value;
         const phone = document.getElementById('user-phone').value;
-        const role = document.getElementById('user-role').value;
+        const position = document.getElementById('user-position').value;
 
         // فحص الأمان
-        if(!name || !phone || !role) {
-            alert("⚠️ يا قائد، املأ البيانات الأساسية أولاً!");
+        if(!name || !phone || !position) {
+            alert("⚠️ يا قائد، املأ البيانات الأساسية (الاسم، الهاتف، الصفة) أولاً!");
             return;
         }
 
         const playerData = {
             fullName: name,
-            nationalID: id,
+            nationalID: nationalId,
             mobile: phone,
-            role: role,
+            role: position,
             timestamp: new Date().toLocaleString()
         };
 
         try {
-            // إرسال للسحابة
             const response = await fetch(firebaseURL, {
                 method: 'POST',
                 body: JSON.stringify(playerData)
             });
 
             if(response.ok) {
-                alert("🚀 تم استلام بياناتك بنجاح! جاري تنشيط رتبتك...");
+                alert("🚀 تم استلام بياناتك بنجاح! الميدان بانتظارك.");
                 document.getElementById('gate-screen').style.display = 'none';
                 document.getElementById('main-app').style.display = 'flex';
             } else {
-                alert("❌ خطأ في السيرفر العالمي");
+                alert("❌ خطأ في السيرفر (تأكد من Rules في Firebase أنها true)");
             }
         } catch (error) {
             alert("⚠️ فشل الاتصال.. تأكد من الإنترنت!");
