@@ -53,12 +53,14 @@
                             <span>📞 الهاتف: ${p.mobile}</span>
                             <span>🎖️ الرتبة: ${p.role}</span>
                             <span>⏰ توقيت الطلب: ${p.timestamp}</span>
-                        </div>
-                        <div>
-                            <button class="btn-accept" onclick="confirmPlayer('${id}')">قبول ✅</button>
-                            <button class="btn-delete" onclick="rejectPlayer('${id}')">حذف 🗑️</button>
-                        </div>
-                    </div>
+                      <div id="gate-screen" class="gate-overlay">
+    <div class="gate-card">
+        <h2>GFA SOVEREIGN</h2>
+        <select id="user-position" class="gfa-input">...</select>
+        
+        <button class="gfa-btn" onclick="requestActivation()">تنشيط الحساب ⚡</button>
+    </div>
+</div>
                 `;
             }
         } catch (e) { console.error("عطل في الرادار"); }
