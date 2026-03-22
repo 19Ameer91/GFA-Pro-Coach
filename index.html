@@ -3,135 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GFA Sovereign - التدشين العالمي 🛡️</title>
+    <title>GFA Pro Coach - لوحة القائد أمير</title>
     <style>
-        :root { --gold: #d4af37; --pitch-green: #2ecc71; --dark: #0a0a0a; }
-        body { background: var(--dark); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; }
-        
-        #gate-screen { 
-            position: fixed; inset: 0; 
-            background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png'), radial-gradient(circle, #1a3c1a 0%, #050505 100%);
-            z-index: 1000; display: flex; align-items: center; justify-content: center; 
-        }
-        .gate-box { 
-            background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); 
-            border: 1px solid rgba(212, 175, 55, 0.3); width: 90%; max-width: 400px; 
-            padding: 30px; border-radius: 25px; text-align: center;
-            box-shadow: 0 0 30px rgba(212,175,55,0.1);
-        }
-        
-        .pro-input {
-            width: 100%; background: rgba(255,255,255,0.9); border: none;
-            padding: 12px; border-radius: 8px; box-sizing: border-box;
-            color: #333; font-weight: bold; margin-bottom: 10px; text-align: right;
-        }
-
-        .btn-gold-pro {
-            width: 100%; background: linear-gradient(45deg, #d4af37, #f2d06b);
-            color: #000; border: none; padding: 15px; margin-top: 10px;
-            border-radius: 12px; font-weight: bold; cursor: pointer; transition: 0.3s;
-        }
-        .btn-gold-pro:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(212, 175, 55, 0.6); }
-
-        #main-app { display: none; width: 100%; height: 100%; align-items: center; justify-content: center; text-align: center; }
+        :root { --gold: #d4af37; --black: #0a0a0a; }
+        body { background: var(--black); color: white; font-family: Arial, sans-serif; text-align: center; }
+        .card { border: 2px solid var(--gold); padding: 20px; margin: 20px; border-radius: 15px; }
+        input, select, button { padding: 12px; margin: 10px; width: 80%; border-radius: 5px; }
+        button { background: var(--gold); color: black; font-weight: bold; cursor: pointer; border: none; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid var(--gold); padding: 10px; }
+        .btn-delete { background: #ff4444; color: white; padding: 5px; width: auto; }
+        .hidden { display: none; }
     </style>
 </head>
 <body>
-<div id="main-app">
-    <h2 style="color: var(--gold);">لوحة تحكم القائد أمير 🛡️</h2>
-    <table border="1" style="width:100%; color: white; border-collapse: collapse;">
-        <thead>
-            <tr style="background: var(--gold); color: black;">
-                <th>الاسم</th>
-                <th>الرتبة</th>
-                <th>الهاتف</th>
-                <th>الإجراء</th>
-            </tr>
-        </thead>
-        <tbody id="admin-table-body">
-            </tbody>
-    </table>
-</div>
-<div id="gate-screen">
-    <div class="gate-box">
-        <div style="text-align: center; margin-bottom: 25px;">
-            <h1 style="color: #d4af37; font-size: 2.5em; margin: 0; letter-spacing: 2px;">GFA</h1>
-            <p style="color: #fff; letter-spacing: 4px; font-size: 0.8em; margin-top: -5px;">SOVEREIGN</p>
-        </div>
 
-        <div class="input-group" style="text-align: right;">
-            <label style="color: #aaa; font-size: 0.8em;">الاسم الثلاثي</label>
-            <input type="text" id="full-name" class="pro-input" placeholder="👤">
-            
-            <label style="color: #aaa; font-size: 0.8em;">رقم الوثيقة الوطنية</label>
-            <input type="text" id="national-id" class="pro-input" placeholder="🆔">
-            
-            <label style="color: #aaa; font-size: 0.8em;">رقم الهاتف النقال</label>
-            <input type="tel" id="user-phone" class="pro-input" placeholder="📞">
-
-            <label style="color: #aaa; font-size: 0.8em;">اختر صفتك الرسمية</label>
-            <select id="user-position" class="pro-input" style="height: 45px;">
-                <option value="">-- حدد نوع الحساب --</option>
-                <option value="ADMIN">مشرف الدوري (المسؤول)</option> 
-                <option value="REF">لجنة التحكيم / حكم</option>
-                <option value="COACH">مدرب الفريق</option>
-                <option value="PLAYER">لاعب كرة قدم</option>
-            </select>
-        </div>
-
-        <button class="btn-gold-pro" onclick="requestActivation()">تنشيط الحساب ⚡</button>
+    <div id="login-screen" class="card">
+        <h1 style="color: var(--gold);">GFA Sovereign 🛡️</h1>
+        <p>مرحباً بك يا قائد أمير، أدخل بياناتك للسيطرة</p>
+        <input type="text" id="fullName" placeholder="الاسم الثلاثي">
+        <input type="tel" id="mobile" placeholder="رقم الهاتف">
+        <select id="role">
+            <option value="ADMIN">مشرف الدوري (المسؤول)</option>
+            <option value="REFEREE">حكم المباراة</option>
+            <option value="PLAYER">لاعب</option>
+        </select>
+        <button onclick="activateAccount()">تنشيط الحساب ⚡</button>
     </div>
-</div>
 
-<div id="main-app">
-    <h2 style="color: var(--gold); font-size: 2em;">✅ تم تفعيل النظام بنجاح يا قائد!<br>الميدان تحت سيطرتك الآن.</h2>
-</div>
+    <div id="admin-dashboard" class="card hidden">
+        <h2 style="color: var(--gold);">لوحة تحكم القائد أمير ⚔️</h2>
+        <p>قائمة المسجلين في النظام (Firebase)</p>
+        <table>
+            <thead>
+                <tr style="background: var(--gold); color: black;">
+                    <th>الاسم</th>
+                    <th>الرتبة</th>
+                    <th>الهاتف</th>
+                    <th>الإجراء</th>
+                </tr>
+            </thead>
+            <tbody id="admin-table-body"></tbody>
+        </table>
+        <button onclick="location.reload()">تحديث القائمة 🔄</button>
+    </div>
 
-<script>
-    // 📡 الرابط الصحيح الخاص بك (procoach)
-    const firebaseURL = "https://procoach-40d9f-default-rtdb.firebaseio.com/registrations.json";
+    <script>
+        const firebaseURL = "https://procoach-40d9f-default-rtdb.firebaseio.com/registrations.json";
 
-    async function requestActivation() {
-        console.log("بدء التنشيط...");
+        async function activateAccount() {
+            const name = document.getElementById('fullName').value;
+            const phone = document.getElementById('mobile').value;
+            const role = document.getElementById('role').value;
 
-        // جلب البيانات مع التأكد من مطابقة الـ IDs
-        const name = document.getElementById('full-name').value;
-        const nationalId = document.getElementById('national-id').value;
-        const phone = document.getElementById('user-phone').value;
-        const position = document.getElementById('user-position').value;
+            if(!name || !phone) { alert("أدخل بياناتك يا قائد!"); return; }
 
-        // فحص الأمان
-        if(!name || !phone || !position) {
-            alert("⚠️ يا قائد، املأ البيانات الأساسية (الاسم، الهاتف، الصفة) أولاً!");
-            return;
-        }
+            const userData = { fullName: name, mobile: phone, role: role, time: new Date() };
 
-        const playerData = {
-            fullName: name,
-            nationalID: nationalId,
-            mobile: phone,
-            role: position,
-            timestamp: new Date().toLocaleString()
-        };
-
-        try {
-            const response = await fetch(firebaseURL, {
-                method: 'POST',
-                body: JSON.stringify(playerData)
-            });
-
-            if(response.ok) {
-                alert("🚀 تم استلام بياناتك بنجاح! الميدان بانتظارك.");
-                document.getElementById('gate-screen').style.display = 'none';
-                document.getElementById('main-app').style.display = 'flex';
+            await fetch(firebaseURL, { method: 'POST', body: JSON.stringify(userData) });
+            
+            if (role === "ADMIN") {
+                document.getElementById('login-screen').classList.add('hidden');
+                document.getElementById('admin-dashboard').classList.remove('hidden');
+                loadData();
             } else {
-                alert("❌ خطأ في السيرفر (تأكد من Rules في Firebase أنها true)");
+                alert("تم إرسال بياناتك بنجاح!");
             }
-        } catch (error) {
-            alert("⚠️ فشل الاتصال.. تأكد من الإنترنت!");
         }
-    }
-</script>
 
+        async function loadData() {
+            const response = await fetch(firebaseURL);
+            const data = await response.json();
+            const tableBody = document.getElementById('admin-table-body');
+            tableBody.innerHTML = "";
+
+            for (let id in data) {
+                const user = data[id];
+                tableBody.innerHTML += `
+                    <tr>
+                        <td>${user.fullName}</td>
+                        <td>${user.role}</td>
+                        <td>${user.mobile}</td>
+                        <td><button class="btn-delete" onclick="deleteUser('${id}')">حذف 🗑️</button></td>
+                    </tr>
+                `;
+            }
+        }
+
+        async function deleteUser(id) {
+            if(confirm("هل تريد حذف هذا الشخص؟")) {
+                await fetch(`https://procoach-40d9f-default-rtdb.firebaseio.com/registrations/${id}.json`, { method: 'DELETE' });
+                loadData();
+            }
+        }
+    </script>
 </body>
 </html>
