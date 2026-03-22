@@ -129,5 +129,43 @@ function deletePlayer(idx) {
     localStorage.setItem('gfa_db', JSON.stringify(db));
     render();
 }
+// 📡 وظيفة جلب البيانات وعرضها للمشرف
+async function loadRegistrations() {
+    const tableBody = document.getElementById('admin-table-body');
+    if (!tableBody) return; // إذا لم تكن في لوحة التحكم، لا تفعل شيئاً
+
+    try {
+        const response = await fetch(firebaseURL);
+        const data = await response.json();
+
+        tableBody.innerHTML = ''; // تنظيف الجدول قبل العرض
+
+        for (let id in data) {
+            const player = data[id];
+            tableBody.innerHTML += `
+                <tr>
+                    <td>${player.fullName}</td>
+                    <td>${player.role}</td>
+                    <td>${player.mobile}</td>
+                    <td>
+                        <button class="btn-accept" onclick="confirmPlayer('${id}')">قبول ✅</button>
+                        <button class="btn-delete" onclick="rejectPlayer('${id}")">حذف 🗑️</button>
+                    </td>
+                </tr>
+            `;
+        }
+    } catch (error) {
+        console.error("خطأ في جلب البيانات:", error);
+    }
+}
+
+// 🗑️ وظيفة حذف سجل (تمير مثلاً!)
+async function rejectPlayer(id) {
+    if (confirm("هل تريد حذف هذا السجل نهائياً؟")) {
+        const deleteURL = `https://procoach-40d9f-default-rtdb.firebaseio.com/registrations/${id}.json`;
+        await fetch(deleteURL, { method: 'DELETE' });
+        loadRegistrations(); // إعادة تحديث الجدول
+    }
+}
 
 window.onload = render;
