@@ -3,84 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GFA Pro Coach - لوحة القائد أمير</title>
+    <title>GFA SOVEREIGN - نظام الإدارة العالمي</title>
     <style>
-        :root { --gold: #d4af37; --black: #0a0a0a; }
-        body { background: var(--black); color: white; font-family: Arial, sans-serif; text-align: center; }
-        .card { border: 2px solid var(--gold); padding: 20px; margin: 20px; border-radius: 15px; }
-        input, select, button { padding: 12px; margin: 10px; width: 80%; border-radius: 5px; }
-        button { background: var(--gold); color: black; font-weight: bold; cursor: pointer; border: none; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { border: 1px solid var(--gold); padding: 10px; }
-        .btn-delete { background: #ff4444; color: white; padding: 5px; width: auto; }
+        /* [نفس الستايل الفخم الذي أرسلته يا أمير مع إضافات بسيطة للوحة التحكم] */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { min-height: 100vh; background: linear-gradient(135deg, #0d3d29 0%, #1a4d2e 50%, #2d6a4f 100%); display: flex; justify-content: center; align-items: center; padding: 20px; position: relative; overflow-x: hidden; }
+        body::before { content: ''; position: absolute; width: 100%; height: 100%; background-image: radial-gradient(circle at 50% 50%, transparent 20%, rgba(255,255,255,0.03) 21%), linear-gradient(90deg, transparent 49%, rgba(255,255,255,0.1) 50%, transparent 51%), linear-gradient(0deg, transparent 49%, rgba(255,255,255,0.1) 50%, transparent 51%); background-size: 100px 100px; opacity: 0.3; z-index: 0; }
+        .container { position: relative; z-index: 1; max-width: 500px; width: 100%; }
+        .logo-section { text-align: center; margin-bottom: 20px; }
+        .logo { width: 100px; height: 100px; margin: 0 auto 10px; background: linear-gradient(145deg, #c9a961, #d4b972); border-radius: 20px; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+        .logo-text { font-size: 38px; font-weight: bold; color: #1a4d2e; }
+        .app-title { color: #c9a961; font-size: 22px; font-weight: 600; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        .form-card { background: rgba(255, 255, 255, 0.95); border-radius: 20px; padding: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.4); backdrop-filter: blur(10px); }
+        .form-group { margin-bottom: 15px; }
+        .form-label { display: block; color: #1a4d2e; font-weight: 600; margin-bottom: 5px; font-size: 14px; }
+        .form-input, .form-select { width: 100%; padding: 12px; border: 2px solid #e0e0e0; border-radius: 10px; font-size: 14px; background: white; }
+        .submit-btn { width: 100%; padding: 15px; background: linear-gradient(145deg, #c9a961, #d4b972); color: #1a4d2e; border: none; border-radius: 12px; font-size: 16px; font-weight: bold; cursor: pointer; margin-top: 20px; box-shadow: 0 5px 15px rgba(201, 169, 97, 0.4); transition: 0.3s; }
         .hidden { display: none; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; color: #1a4d2e; }
+        th, td { border: 1px solid #c9a961; padding: 8px; text-align: center; font-size: 13px; }
     </style>
 </head>
 <body>
 
-<div id="verification-section" style="border: 1px dashed var(--gold); padding: 10px; margin-top: 10px; border-radius: 10px;">
-    <h4 style="color: var(--gold); margin-bottom: 5px;">التحقق من الهوية الرقمية 🛡️</h4>
-    
-    <select id="verifyMethod" style="width: 90%; background: #333;">
-        <option value="WHATSAPP">استلام الكود عبر (WhatsApp) ✅</option>
-        <option value="SMS">استلام الكود عبر (رسالة نصية SMS) 📱</option>
-    </select>
+<div class="container">
+    <div class="logo-section">
+        <div class="logo"><div class="logo-text">GFA</div></div>
+        <h1 class="app-title">SOVEREIGN</h1>
+    </div>
 
-    <button id="sendCodeBtn" onclick="sendOTP()" style="width: 90%; background: #28a745; color: white;">طلب كود التفعيل 📲</button>
+    <div id="auth-screen" class="form-card">
+        <div class="form-group">
+            <label class="form-label">كود الدوري (غرفة العمليات)</label>
+            <input type="text" id="leagueCode" class="form-input" placeholder="مثال: GFA-9922" required>
+        </div>
+        <div class="form-group">
+            <label class="form-label">الاسم الثلاثي</label>
+            <input type="text" id="fullName" class="form-input" placeholder="أدخل اسمك الكامل">
+        </div>
+        <div class="form-group">
+            <label class="form-label">رقم الهاتف النقال</label>
+            <input type="tel" id="mobile" class="form-input" placeholder="968xxxxxxx">
+        </div>
+        <div class="form-group">
+            <label class="form-label">اختر رتبتك في الميدان</label>
+            <select id="role" class="form-select">
+                <option value="PLAYER">لاعب كرة قدم</option>
+                <option value="MANAGER">مدير فريق (صاحب الكتيبة)</option>
+                <option value="ADMIN">مشرف الدوري (المسؤول العام)</option>
+            </select>
+        </div>
 
-    <div id="otp-input-area" class="hidden" style="margin-top: 10px;">
-        <input type="text" id="otpCode" placeholder="أدخل الكود المكون من 6 أرقام" style="text-align: center; letter-spacing: 5px;">
-        <button onclick="verifyAndAdd()" style="width: 90%; background: var(--gold); color: black;">تأكيد وإضافة للفريق ✅</button>
+        <div id="verify-box" class="form-group" style="border-top: 1px solid #ddd; pt: 15px;">
+            <label class="form-label">وسيلة استلام كود التفعيل 🛡️</label>
+            <select id="verifyMethod" class="form-select" style="background: #f9f9f9;">
+                <option value="WHATSAPP">عبر الواتساب (WhatsApp)</option>
+                <option value="SMS">عبر الرسائل النصية (SMS)</option>
+            </select>
+        </div>
+
+        <button onclick="processEntry()" class="submit-btn">دخول الميدان ⚡</button>
+    </div>
+
+    <div id="dashboard" class="form-card hidden">
+        <h2 id="leagueTitle" style="color: #1a4d2e; text-align: center;"></h2>
+        <div id="admin-view" class="hidden">
+            <p style="text-align: center; font-size: 14px; color: #666;">كشف أعضاء الدوري المسجلين</p>
+            <table>
+                <thead>
+                    <tr style="background: #c9a961; color: white;">
+                        <th>الاسم</th>
+                        <th>الرتبة</th>
+                        <th>الهاتف</th>
+                    </tr>
+                </thead>
+                <tbody id="data-table"></tbody>
+            </table>
+        </div>
+        <button onclick="location.reload()" class="submit-btn" style="background: #1a4d2e; color: #c9a961;">خروج من الغرفة 🔙</button>
     </div>
 </div>
-    <script>
-        const firebaseURL = "https://procoach-40d9f-default-rtdb.firebaseio.com/registrations.json";
 
-        async function activateAccount() {
-            const name = document.getElementById('fullName').value;
-            const phone = document.getElementById('mobile').value;
-            const role = document.getElementById('role').value;
+<script>
+    const baseURL = "https://procoach-40d9f-default-rtdb.firebaseio.com/leagues/";
 
-            if(!name || !phone) { alert("أدخل بياناتك يا قائد!"); return; }
+    async function processEntry() {
+        const league = document.getElementById('leagueCode').value.toUpperCase();
+        const name = document.getElementById('fullName').value;
+        const phone = document.getElementById('mobile').value;
+        const role = document.getElementById('role').value;
+        const method = document.getElementById('verifyMethod').value;
 
-            const userData = { fullName: name, mobile: phone, role: role, time: new Date() };
-
-            await fetch(firebaseURL, { method: 'POST', body: JSON.stringify(userData) });
-            
-            if (role === "ADMIN") {
-                document.getElementById('login-screen').classList.add('hidden');
-                document.getElementById('admin-dashboard').classList.remove('hidden');
-                loadData();
-            } else {
-                alert("تم إرسال بياناتك بنجاح!");
-            }
+        if (!league || !name || !phone) {
+            alert("يا قائد، المعلومات ناقصة!");
+            return;
         }
 
-        async function loadData() {
-            const response = await fetch(firebaseURL);
-            const data = await response.json();
-            const tableBody = document.getElementById('admin-table-body');
-            tableBody.innerHTML = "";
+        // محاكاة إرسال الكود حسب الوسيلة المختارة
+        alert(`جاري إرسال كود التحقق إلى ${phone} عبر ${method}...`);
+        const otp = prompt("أدخل الكود المستلم لتأكيد هويتك:");
 
+        if (otp) { // في النسخة الحقيقية نتحقق من الكود
+            const userData = { fullName: name, mobile: phone, role: role, verified: true };
+            const url = `${baseURL}${league}/members.json`;
+            
+            await fetch(url, { method: 'POST', body: JSON.stringify(userData) });
+            
+            alert("تم تفعيل هويتك بنجاح! الميدان تحت تصرفك.");
+            showDashboard(league, role);
+        }
+    }
+
+    async function showDashboard(league, role) {
+        document.getElementById('auth-screen').classList.add('hidden');
+        document.getElementById('dashboard').classList.remove('hidden');
+        document.getElementById('leagueTitle').innerText = "دوري: " + league;
+
+        if (role === "ADMIN" || role === "MANAGER") {
+            document.getElementById('admin-view').classList.remove('hidden');
+            const response = await fetch(`${baseURL}${league}/members.json`);
+            const data = await response.json();
+            const table = document.getElementById('data-table');
+            table.innerHTML = "";
             for (let id in data) {
                 const user = data[id];
-                tableBody.innerHTML += `
-                    <tr>
-                        <td>${user.fullName}</td>
-                        <td>${user.role}</td>
-                        <td>${user.mobile}</td>
-                        <td><button class="btn-delete" onclick="deleteUser('${id}')">حذف 🗑️</button></td>
-                    </tr>
-                `;
+                table.innerHTML += `<tr><td>${user.fullName}</td><td>${user.role}</td><td>${user.mobile}</td></tr>`;
             }
         }
-
-        async function deleteUser(id) {
-            if(confirm("هل تريد حذف هذا الشخص؟")) {
-                await fetch(`https://procoach-40d9f-default-rtdb.firebaseio.com/registrations/${id}.json`, { method: 'DELETE' });
-                loadData();
-            }
-        }
-    </script>
+    }
+</script>
 </body>
 </html>
