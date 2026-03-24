@@ -18,36 +18,21 @@
 </head>
 <body>
 
-    <div id="login-screen" class="card">
-        <h1 style="color: var(--gold);">GFA Sovereign 🛡️</h1>
-        <p>مرحباً بك يا قائد أمير، أدخل بياناتك للسيطرة</p>
-        <input type="text" id="fullName" placeholder="الاسم الثلاثي">
-        <input type="tel" id="mobile" placeholder="رقم الهاتف">
-        <select id="role">
-            <option value="ADMIN">مشرف الدوري (المسؤول)</option>
-            <option value="REFEREE">حكم المباراة</option>
-            <option value="PLAYER">لاعب</option>
-        </select>
-        <button onclick="activateAccount()">تنشيط الحساب ⚡</button>
-    </div>
+<div id="verification-section" style="border: 1px dashed var(--gold); padding: 10px; margin-top: 10px; border-radius: 10px;">
+    <h4 style="color: var(--gold); margin-bottom: 5px;">التحقق من الهوية الرقمية 🛡️</h4>
+    
+    <select id="verifyMethod" style="width: 90%; background: #333;">
+        <option value="WHATSAPP">استلام الكود عبر (WhatsApp) ✅</option>
+        <option value="SMS">استلام الكود عبر (رسالة نصية SMS) 📱</option>
+    </select>
 
-    <div id="admin-dashboard" class="card hidden">
-        <h2 style="color: var(--gold);">لوحة تحكم القائد أمير ⚔️</h2>
-        <p>قائمة المسجلين في النظام (Firebase)</p>
-        <table>
-            <thead>
-                <tr style="background: var(--gold); color: black;">
-                    <th>الاسم</th>
-                    <th>الرتبة</th>
-                    <th>الهاتف</th>
-                    <th>الإجراء</th>
-                </tr>
-            </thead>
-            <tbody id="admin-table-body"></tbody>
-        </table>
-        <button onclick="location.reload()">تحديث القائمة 🔄</button>
-    </div>
+    <button id="sendCodeBtn" onclick="sendOTP()" style="width: 90%; background: #28a745; color: white;">طلب كود التفعيل 📲</button>
 
+    <div id="otp-input-area" class="hidden" style="margin-top: 10px;">
+        <input type="text" id="otpCode" placeholder="أدخل الكود المكون من 6 أرقام" style="text-align: center; letter-spacing: 5px;">
+        <button onclick="verifyAndAdd()" style="width: 90%; background: var(--gold); color: black;">تأكيد وإضافة للفريق ✅</button>
+    </div>
+</div>
     <script>
         const firebaseURL = "https://procoach-40d9f-default-rtdb.firebaseio.com/registrations.json";
 
